@@ -28,3 +28,24 @@ add_action('wp_enqueue_scripts', 'page_style_multiple()');
 update_option('siteurl','https://abc.com');
 update_option('home','https://abc.com');
 ```
+
+## 관리자 로그인 페이지 로고 변경하기
+- function.php
+```php
+function my_login_logo_one() {
+        ?>
+        <style type="text/css">
+                #login {
+                        padding: 10% 0 0 !important;
+                }
+                body.login #login h1 a {
+                        background-image: url('media url');
+                        background-size: 200px;
+                        width: 200px;
+                        padding-bottom: 10%;
+                }
+        </style>
+        <?php
+} add_action('login_enqueue_scripts', 'my_login_logo_one');
+
+```
