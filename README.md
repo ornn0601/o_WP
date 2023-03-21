@@ -49,3 +49,35 @@ function my_login_logo_one() {
 } add_action('login_enqueue_scripts', 'my_login_logo_one');
 
 ```
+
+## contact form 7 ip 가져오기
+```php
+// ip 주소 가져오기
+add_filter('wpcf7_form_hidden_fields','add_hidden_ip_field');
+function add_hidden_ip_field($fields) {
+  $fields['_wpcf7_ip'] = get_ip_address(); //get the remote IP
+  return $fields;
+}
+
+function get_ip_address() {
+	foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR') as $key){
+		if (array_key_exists($key, $_SERVER) === true){
+			foreach (explode(',', $_SERVER[$key]) as $ip){
+				$ip = trim($ip); // just to be safe
+				
+				if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false){
+					return $ip;
+				}
+			}
+		}
+	}
+}
+```
+```js
+// ip 주소 매핑하기
+	function remoteIP() {
+		let wpcf7_ip = $('input[name=_wpcf7_ip]').val();
+		let remote_ip = $('input[name=remote_ip]');
+		remote_ip.val(wpcf7_ip);
+	}
+```
